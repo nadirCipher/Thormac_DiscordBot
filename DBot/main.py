@@ -22,7 +22,7 @@ intents.reactions = True
 intents.members = True
 intents.messages = True 
 
-guild_id = 1292586058961129578
+guild_id = #you dont get to see this
 GUILD_ID = discord.Object(id=guild_id)
 
 bot = commands.Bot(command_prefix="!", intents=intents)
