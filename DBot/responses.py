@@ -1,7 +1,7 @@
 from random import choice, randint
 from maths import score_calc
-from account_manager import create_account
-from account_manager import read_data
+from data_manager import create_account
+from data_manager import read_data
 import json
 import os
 

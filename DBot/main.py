@@ -7,9 +7,9 @@ from discord import app_commands
 from responses import Match_Input
 import asyncio
 from responses import Score_finder
-from account_manager import compile_top
+from data_manager import compile_top
 from discord import *
-from account_manager import fetch_top_users
+from data_manager import fetch_top_users
 
 # Load token
 load_dotenv()
@@ -22,7 +22,7 @@ intents.reactions = True
 intents.members = True
 intents.messages = True 
 
-guild_id = #you dont get to see this
+guild_id = 1292586058961129578
 GUILD_ID = discord.Object(id=guild_id)
 
 bot = commands.Bot(command_prefix="!", intents=intents)
