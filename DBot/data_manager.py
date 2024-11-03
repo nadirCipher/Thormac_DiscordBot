@@ -1,5 +1,6 @@
 import json
 import os
+import random
 from typing import Final
 import discord
 from discord.ext import commands
@@ -35,7 +36,8 @@ def create_account(username):
     else:
         accounts[username] = {
             "scale": 10.0,
-            "matches": 0
+            "matches": 0,
+            "opt_in": "false"
         }
         with open("user_data.json", 'w') as file:
             json.dump(accounts, file)
@@ -111,6 +113,38 @@ async def fetch_top_users(guild_id, bot):
         # else:
         #     output.append(f"{index}{ordinal(index)}: {user} | {int(scale * 100) / 100}")
     return output
+
+def Weekly_matchs() -> str:
+    print("nah")
+    with open('user_data.json', 'r') as file:
+        data = json.load(file)
+
+    opt_in_users = [user for user, info in data.items() if info["opt_in"] == "true"]
+    print(opt_in_users)
+
+    random.shuffle(opt_in_users)
+
+    pairs = []
+    while len(opt_in_users) >= 2:
+        pair = (opt_in_users.pop(), opt_in_users.pop())
+        pairs.append(pair)
+
+    odd_user = opt_in_users[0] if opt_in_users else None
+    print(odd_user)
+
+    message = "Matched Pairs:\n"
+    for pair in pairs:
+        message += f"{pair[0]} with {pair[1]}\n"
+
+    if odd_user:
+        message += f"\nOdd user out: {odd_user}"
+    print(message)
+    return message
+
+
+
+
+
 
 
 # create_account("test1")

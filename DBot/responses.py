@@ -2,6 +2,7 @@ from random import choice, randint
 from maths import score_calc
 from data_manager import create_account
 from data_manager import read_data
+from data_manager import edit_account
 import json
 import os
 
@@ -24,5 +25,23 @@ def Score_finder(user) -> str:
         return(int(scale*100)/100)
     else:
         return(f"sorry but it does not seam we have data on {user} just yet")
+
+def Opt_in(user) -> str:
+    create_account(f"<@{user}>")
+    if read_data(f"<@{user}>", "opt_in") == "true":
+        return(f"<@{user}> Your already opted in!")
+    else:
+        edit_account(f"<@{user}>", "opt_in", "true")
+        return(f"Glad to see <@{user}> is joining in!")
+
+def Opt_out(user) -> str:
+    create_account(f"<@{user}>")
+    if read_data(f"<@{user}>", "opt_in") == "false":
+        return(f"<@{user}> Your already opted out!")
+    else:
+        edit_account(f"<@{user}>", "opt_in", "false")
+        return(f"Sad to see <@{user}> cant play any more")
+    
+
 
 # Match_Input("test1", "test2", "test3")

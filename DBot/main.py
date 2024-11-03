@@ -1,19 +1,23 @@
-from typing import Final
-import os
-from dotenv import load_dotenv
 import discord
 from discord.ext import commands
 from discord import app_commands
-from responses import Match_Input
+from discord import *
+
 import asyncio
+import os
+
+from typing import Final
 from responses import Score_finder
 from data_manager import compile_top
-from discord import *
 from data_manager import fetch_top_users
+from data_manager import Weekly_matchs
+from responses import Opt_in
+from responses import Opt_out
+from responses import Match_Input
+
 
 # Load token
-load_dotenv()
-TOKEN: Final[str] = os.getenv('DISCORD_TOKEN')
+TOKEN: Final[str] = "PUT TOCKEN HERE"
 
 # Bot permission setup
 intents = discord.Intents.default()
@@ -37,6 +41,27 @@ async def say_hello(interaction: discord.Interaction):
 async def say_hello(interaction: discord.Interaction, printer: str):
     await interaction.response.send_message(printer)
 '''
+@bot.tree.command(name="opt_in", description="puts you on the draw list for bi-weekly matchs")
+async def opt_in(interaction: discord.Interaction):
+    user = interaction.user.id
+    await interaction.response.send_message(Opt_in(user))
+
+@bot.tree.command(name="opt_out", description="takes you out of the draw list for bi-weekly matchs")
+async def opt_in(interaction: discord.Interaction):
+    user = interaction.user.id
+    await interaction.response.send_message(Opt_out(user))
+
+#1299189522327933001
+@bot.tree.command(name="match_send", description="sends matchs")
+async def opt_in(interaction: discord.Interaction):
+    print("command recived")
+    user = interaction.user.id
+    if user != 938574245716455525:
+        await interaction.response.send_message("You Dont have permision", ephemeral=True)
+    else:
+        await interaction.response.send_message(Weekly_matchs(), ephemeral=False)
+    
+
 @bot.tree.command(name="find_score", description="whos score do ya wana know?")
 async def say_hello(interaction: discord.Interaction, user: str):
     await interaction.response.send_message(Score_finder(user))
@@ -50,7 +75,7 @@ import traceback
 @bot.tree.command(name="top_ten", description="prints the top 10 list")
 async def top_ten(interaction: discord.Interaction):
     guild = interaction.guild
-    print(f"Guild type: {type(guild)}")  # Check the type of guild
+    print(f"Guild type: {type(guild)}")  
     print(f"Guild ID: {guild.id}")
 
     guild_id = guild.id
@@ -59,6 +84,7 @@ async def top_ten(interaction: discord.Interaction):
     formatted = "\n".join(top_list)
     formatted = "```" + formatted + "```"
     await interaction.response.send_message(formatted, ephemeral=False)
+
 
 @bot.tree.command(name="input_match", description="Input a match to update your thormac scale!")#, guild=GUILD_ID
 async def confirm_match(interaction: discord.Interaction, winner: str, looser: str, match_confirmer: discord.User):
@@ -98,7 +124,9 @@ async def confirm_match(interaction: discord.Interaction, winner: str, looser: s
 # Bot start-up
 @bot.event
 async def on_ready() -> None:
+    await bot.tree.sync()
     print(f'{bot.user} is now running v.{discord.__version__}')
+    
 
     # #This was for testing on one server 
     # try:
@@ -114,7 +142,7 @@ async def on_ready() -> None:
 
         # Fetch all members in the guild
         async for member in guild.fetch_members(limit=None):
-            # Here, the member will be added to the cache automatically
+
             print(f'Added {member.name} to cache (ID: {member.id})')
 
 # Main entry point
